@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    >
+
+    <title>River Bathymetry</title>
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/map.css"
+    >
+</head>
+
+<body>
+
+<div id="map"></div>
+
+
+<!-- ======================================================
+     MAP CONTROLS
+======================================================= -->
+
+<div id="map-controls">
+
+    <!-- ZOOM -->
+
+    <div class="zoom-stack">
+
+        <button
+            id="zoom-in"
+            class="control-button"
+            aria-label="Збільшити масштаб"
+        >
+            <svg
+                class="ui-icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
+                <path d="M12 5v14M5 12h14"></path>
+            </svg>
+        </button>
+
+
+        <button
+            id="zoom-out"
+            class="control-button"
+            aria-label="Зменшити масштаб"
+        >
+            <svg
+                class="ui-icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
+                <path d="M5 12h14"></path>
+            </svg>
+        </button>
+
+    </div>
+
+
+    <!-- SETTINGS -->
+
+    <button
+        id="settings-button"
+        class="control-button"
+        aria-label="Налаштування карти"
+    >
+        <svg
+            class="ui-icon"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+        >
+            <path d="M12 3 4 7 12 11 20 7 12 3Z"></path>
+            <path d="M4 11 12 15 20 11"></path>
+            <path d="M4 15 12 19 20 15"></path>
+        </svg>
+    </button>
+
+
+    <!-- GPS -->
+
+    <button
+        id="location-button"
+        class="control-button"
+        aria-label="Моя геопозиція"
+    >
+        <svg
+            class="ui-icon location-icon"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+        >
+            <circle cx="12" cy="12" r="3"></circle>
+            <circle cx="12" cy="12" r="7"></circle>
+
+            <path d="M12 2v3"></path>
+            <path d="M12 19v3"></path>
+            <path d="M2 12h3"></path>
+            <path d="M19 12h3"></path>
+        </svg>
+    </button>
+
+
+    <!-- TAPE MEASURE -->
+
+    <button
+        id="ruler-button"
+        class="control-button ruler-control"
+        aria-label="Виміряти відстань"
+    >
+        <svg
+            class="tape-measure-icon"
+            viewBox="0 0 64 64"
+            aria-hidden="true"
+        >
+
+            <path
+                d="
+                    M14 47
+                    V31
+                    C14 19.5 23 10.5 34.5 10.5
+                    C46 10.5 55 19.5 55 31
+                    V35
+                    C55 38 57 40 60 40
+                    H61
+                    V51
+                    H25
+                    C18.5 51 14 50 14 47
+                    Z
+                "
+            ></path>
+
+            <path
+                d="
+                    M20 42
+                    V31
+                    C20 22.5 26 16.5 34.5 16.5
+                    C43 16.5 49 22.5 49 31
+                    V36
+                "
+            ></path>
+
+            <circle
+                cx="34.5"
+                cy="31"
+                r="7.5"
+            ></circle>
+
+            <circle
+                cx="24"
+                cy="43.5"
+                r="3.2"
+            ></circle>
+
+            <path
+                d="
+                    M20.5 18.5
+                    L25 13
+                    L30 17.5
+                    L25 23
+                    Z
+                "
+            ></path>
+
+            <path d="M25 51 H61"></path>
+
+            <path d="M37.5 51 V46.5"></path>
+            <path d="M43.5 51 V47.5"></path>
+            <path d="M49.5 51 V46.5"></path>
+            <path d="M55.5 51 V47.5"></path>
+
+        </svg>
+    </button>
+
+</div>
+
+
+<!-- ======================================================
+     SETTINGS PANEL
+======================================================= -->
+
+<div
+    id="settings-panel"
+    class="settings-panel"
+>
+
+    <div class="settings-header">
+
+        <div class="settings-title">
+            Налаштування карт
+        </div>
+
+        <button
+            id="settings-close"
+            class="settings-close"
+            aria-label="Закрити"
+        >
+            ×
+        </button>
+
+    </div>
+
+
+    <!-- MAP TYPE -->
+
+    <div class="settings-section">
+
+        <div class="settings-section-title">
+            Вид карти
+        </div>
+
+        <div class="segmented-control">
+
+            <button
+                id="map-style-map"
+                class="segment-button active"
+            >
+                Карта
+            </button>
+
+            <button
+                id="map-style-satellite"
+                class="segment-button"
+            >
+                Супутник
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- MAP LABELS -->
+
+    <div class="settings-row">
+
+        <div class="settings-row-text">
+
+            <div class="settings-row-title">
+                Написи
+            </div>
+
+            <div class="settings-row-subtitle">
+                Населені пункти, дороги та об'єкти
+            </div>
+
+        </div>
+
+        <label class="switch">
+
+            <input
+                id="labels-toggle"
+                type="checkbox"
+                checked
+            >
+
+            <span class="slider"></span>
+
+        </label>
+
+    </div>
+
+
+    <!-- PALETTES -->
+
+    <div class="settings-section">
+
+        <div class="settings-section-title">
+            Палітра кольорів
+        </div>
+
+        <div class="palette-options">
+
+            <button
+                id="palette-blue"
+                class="palette-card active"
+            >
+                <div class="palette-check">
+                    ✓
+                </div>
+
+                <div
+                    class="palette-preview palette-preview-blue"
+                ></div>
+
+                <div class="palette-name">
+                    Морська хвиля
+                </div>
+            </button>
+
+
+            <button
+                id="palette-aqua"
+                class="palette-card"
+            >
+                <div class="palette-check">
+                    ✓
+                </div>
+
+                <div
+                    class="palette-preview palette-preview-aqua"
+                ></div>
+
+                <div class="palette-name">
+                    Аквамарин
+                </div>
+            </button>
+
+
+            <button
+                id="palette-gray"
+                class="palette-card"
+            >
+                <div class="palette-check">
+                    ✓
+                </div>
+
+                <div
+                    class="palette-preview palette-preview-gray"
+                ></div>
+
+                <div class="palette-name">
+                    Сірі будні
+                </div>
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- DEPTH LABELS -->
+
+    <div class="settings-row">
+
+        <div class="settings-row-text">
+
+            <div class="settings-row-title">
+                Написи глибини
+            </div>
+
+            <div class="settings-row-subtitle">
+                Показувати значення глибин на карті
+            </div>
+
+        </div>
+
+        <label class="switch">
+
+            <input
+                id="depth-labels-toggle"
+                type="checkbox"
+                checked
+            >
+
+            <span class="slider"></span>
+
+        </label>
+
+    </div>
+
+
+    <!-- GPS RINGS -->
+
+    <div class="settings-section distance-settings">
+
+        <div class="settings-row distance-toggle-row">
+
+            <div class="settings-row-text">
+
+                <div class="settings-row-title">
+                    Коло відстаней
+                </div>
+
+                <div class="settings-row-subtitle">
+                    Три кола навколо вашої GPS-позиції
+                </div>
+
+            </div>
+
+            <label class="switch">
+
+                <input
+                    id="distance-rings-toggle"
+                    type="checkbox"
+                    checked
+                >
+
+                <span class="slider"></span>
+
+            </label>
+
+        </div>
+
+
+        <div id="radius-settings">
+
+            <div class="radius-header">
+
+                <span>
+                    Максимальний радіус
+                </span>
+
+                <strong id="radius-value">
+                    90 м
+                </strong>
+
+            </div>
+
+
+            <input
+                id="radius-slider"
+                class="radius-slider"
+                type="range"
+                min="90"
+                max="180"
+                step="30"
+                value="90"
+            >
+
+
+            <div class="radius-scale">
+                <span>90 м</span>
+                <span>120 м</span>
+                <span>150 м</span>
+                <span>180 м</span>
+            </div>
+
+
+            <div
+                id="ring-values"
+                class="ring-values"
+            >
+                Кола: 30 · 60 · 90 м
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="settings-info">
+
+        <div class="settings-info-icon">
+            i
+        </div>
+
+        <div>
+            Кола та напрямок працюють після надання доступу
+            до геолокації та орієнтації пристрою.
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     GPS STATUS
+======================================================= -->
+
+<div
+    id="gps-status"
+    class="gps-status hidden"
+>
+
+    <div class="gps-status-dot"></div>
+
+    <div>
+
+        <strong>
+            Позицію знайдено
+        </strong>
+
+        <div id="gps-accuracy">
+            Точність: —
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     MEASURE PANEL
+======================================================= -->
+
+<div
+    id="measure-panel"
+    class="measure-panel hidden"
+>
+
+    <div class="measure-panel-top">
+
+        <div>
+
+            <div class="measure-panel-title">
+                Вимірювання відстані
+            </div>
+
+            <div
+                id="measure-distance"
+                class="measure-panel-distance"
+            >
+                0 м
+            </div>
+
+        </div>
+
+
+        <button
+            id="measure-close"
+            class="measure-close"
+            aria-label="Закрити вимірювання"
+        >
+            ×
+        </button>
+
+    </div>
+
+
+    <div
+        id="measure-hint"
+        class="measure-hint"
+    >
+        Натисніть на карті, щоб встановити точку A
+    </div>
+
+</div>
+
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
+
+<script
+    src="js/map.js"
+></script>
+
+</body>
+
+</html>

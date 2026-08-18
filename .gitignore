@@ -1,0 +1,55 @@
+# Raw downloaded Deeper tiles
+tiles_location*/
+*.vector
+
+# Download state
+download_location*_state.json
+
+# Temporary / test files
+*.tmp
+__pycache__/
+*.pyc
+
+# Local backups
+backup_*/
+river_points_before_*
+river_polygons_before_*
+river_meta_before_*
+river_points_immediate_before_*
+river_polygons_immediate_before_*
+river_meta_immediate_before_*
+
+# Test files
+test_location14.html
+
+# Windows
+Thumbs.db
+Desktop.ini
+# Secrets / download scripts containing Deeper tokens
+download_*.py
+
+# Raw/intermediate location data
+depth_points_*.csv
+depth_polygons_*.geojson
+location*_property_samples.json
+
+# Old map copies / archives
+deepmap*/
+*.rar
+
+# Old download states
+*_state.json
+
+# Strange temporary files
+0
+2
+/depth_polygons.geojson
+# Old/test web data
+web/data/*_backup.json
+web/data/*_backup.geojson
+web/data/*_broken_merge.json
+web/data/*_broken_merge.geojson
+web/data/*_dissolved_test.geojson
+
+# Old JS backups
+web/js/map_before_*.js

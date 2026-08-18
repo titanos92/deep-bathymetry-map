@@ -1,0 +1,18 @@
+{
+  "bounds": {
+    "south": 50.4881561,
+    "north": 51.0406228,
+    "west": 30.2700149,
+    "east": 30.6655049
+  },
+  "point_count": 40057,
+  "polygon_count": 55417,
+  "min_depth": 0.3,
+  "max_depth": 26.0,
+  "added_locations": [
+    9,
+    10,
+    11,
+    12
+  ]
+}

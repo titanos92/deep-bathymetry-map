@@ -1,0 +1,1894 @@
+* {
+    box-sizing: border-box;
+}
+
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    overflow: hidden;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background: #111;
+}
+
+
+button,
+input {
+    font-family: inherit;
+}
+
+
+#map {
+    position: fixed;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+}
+
+
+/* =========================================================
+   RIGHT CONTROL COLUMN
+========================================================= */
+
+#map-controls {
+    position: fixed;
+
+    top: 18px;
+    right: 18px;
+
+    z-index: 1200;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 9px;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   ZOOM — LEFT SIDE
+========================================================= */
+
+.zoom-stack {
+    position: fixed;
+
+    top: 18px;
+    left: 18px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 1px;
+
+    pointer-events: auto;
+}
+
+
+/* =========================================================
+   GENERAL CONTROL BUTTON
+========================================================= */
+
+.control-button {
+    width: 54px;
+    height: 54px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .10
+        );
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #252c30 0%,
+            #11171a 100%
+        );
+
+    color: white;
+
+    box-shadow:
+        0 4px 12px
+        rgba(
+            0,
+            0,
+            0,
+            .38
+        );
+
+    cursor: pointer;
+
+    pointer-events: auto;
+
+    touch-action:
+        manipulation;
+
+    -webkit-tap-highlight-color:
+        transparent;
+
+    transition:
+        transform .10s ease,
+        background .15s ease,
+        border-color .15s ease,
+        box-shadow .15s ease;
+}
+
+
+.control-button:hover {
+    background:
+        linear-gradient(
+            145deg,
+            #30383c 0%,
+            #161d21 100%
+        );
+}
+
+
+.control-button:active {
+    transform:
+        scale(.95);
+}
+
+
+/* =========================================================
+   ZOOM BUTTON SHAPE
+========================================================= */
+
+.zoom-stack .control-button {
+    border-radius: 0;
+}
+
+
+.zoom-stack .control-button:first-child {
+    border-radius:
+        13px 13px 3px 3px;
+}
+
+
+.zoom-stack .control-button:last-child {
+    border-radius:
+        3px 3px 13px 13px;
+}
+
+
+/* =========================================================
+   GENERIC ICONS
+========================================================= */
+
+.ui-icon {
+    width: 27px;
+    height: 27px;
+
+    fill: none;
+
+    stroke: white;
+
+    stroke-width: 1.8;
+
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   SETTINGS BUTTON
+========================================================= */
+
+#settings-button.active {
+    border-color:
+        #1685e5;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(
+            22,
+            133,
+            229,
+            .20
+        ),
+        0 4px 12px
+        rgba(
+            0,
+            0,
+            0,
+            .38
+        );
+}
+
+
+#settings-button.active .ui-icon {
+    stroke:
+        #54b1ff;
+}
+
+
+/* =========================================================
+   GPS BUTTON
+========================================================= */
+
+#location-button {
+    border-radius: 50%;
+}
+
+
+#location-button.active {
+    border-color:
+        #43a6ff;
+
+    background:
+        linear-gradient(
+            145deg,
+            #2497ff 0%,
+            #0874df 100%
+        );
+
+    box-shadow:
+        0 4px 13px
+        rgba(
+            0,
+            0,
+            0,
+            .38
+        );
+}
+
+
+#location-button.active .ui-icon {
+    stroke: white;
+}
+
+
+/* =========================================================
+   TAPE MEASURE BUTTON
+========================================================= */
+
+#ruler-button.ruler-control {
+    width: 54px;
+    height: 54px;
+
+    padding: 0;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .12
+        );
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            145deg,
+            #252c30 0%,
+            #101619 100%
+        );
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow:
+        0 4px 12px
+        rgba(
+            0,
+            0,
+            0,
+            .40
+        );
+
+    transition:
+        transform .12s ease,
+        border-color .15s ease,
+        box-shadow .15s ease,
+        background .15s ease;
+}
+
+
+/*
+   НЕАКТИВНА:
+   темна кнопка + біла рулетка.
+*/
+
+.tape-measure-icon {
+    width: 38px;
+    height: 38px;
+
+    fill: none;
+
+    stroke:
+        #ffffff;
+
+    stroke-width:
+        1.75;
+
+    stroke-linecap:
+        round;
+
+    stroke-linejoin:
+        round;
+
+    pointer-events: none;
+}
+
+
+.tape-measure-icon path,
+.tape-measure-icon circle {
+    vector-effect:
+        non-scaling-stroke;
+}
+
+
+#ruler-button.ruler-control:hover {
+    border-color:
+        rgba(
+            255,
+            255,
+            255,
+            .20
+        );
+
+    background:
+        linear-gradient(
+            145deg,
+            #30383c 0%,
+            #151c20 100%
+        );
+}
+
+
+/*
+   АКТИВНА:
+   тільки тут з'являється жовтий круг.
+*/
+
+#ruler-button.ruler-control.active {
+    border:
+        2px solid
+        #ffd400;
+
+    background:
+        linear-gradient(
+            145deg,
+            #252c30 0%,
+            #101619 100%
+        );
+
+    box-shadow:
+        0 0 0 2px
+        rgba(
+            255,
+            212,
+            0,
+            .12
+        ),
+        0 5px 15px
+        rgba(
+            0,
+            0,
+            0,
+            .45
+        );
+}
+
+
+#ruler-button.ruler-control.active
+.tape-measure-icon {
+    stroke:
+        white;
+}
+
+
+/* =========================================================
+   SETTINGS PANEL
+========================================================= */
+
+.settings-panel {
+    position: fixed;
+
+    top: 18px;
+    right: 84px;
+
+    z-index: 1300;
+
+    width: 390px;
+
+    max-height:
+        calc(
+            100vh
+            -
+            36px
+        );
+
+    overflow-y: auto;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(
+                26,
+                33,
+                37,
+                .985
+            )
+            0%,
+
+            rgba(
+                15,
+                21,
+                24,
+                .985
+            )
+            100%
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .10
+        );
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 10px 35px
+        rgba(
+            0,
+            0,
+            0,
+            .40
+        );
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transform:
+        translateX(
+            18px
+        )
+        scale(
+            .985
+        );
+
+    transform-origin:
+        top right;
+
+    transition:
+        opacity .18s ease,
+        transform .18s ease;
+
+    scrollbar-width:
+        thin;
+
+    scrollbar-color:
+        #4b555b
+        transparent;
+}
+
+
+.settings-panel.visible {
+    opacity: 1;
+
+    pointer-events: auto;
+
+    transform:
+        translateX(
+            0
+        )
+        scale(
+            1
+        );
+}
+
+
+/* =========================================================
+   SETTINGS HEADER
+========================================================= */
+
+.settings-header {
+    min-height: 68px;
+
+    padding:
+        0 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .10
+        );
+}
+
+
+.settings-title {
+    color: white;
+
+    font-size: 21px;
+    font-weight: 700;
+}
+
+
+.settings-close {
+    width: 40px;
+    height: 40px;
+
+    padding: 0;
+
+    border: 0;
+
+    border-radius: 9px;
+
+    background:
+        transparent;
+
+    color: white;
+
+    font-size: 31px;
+
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+
+.settings-close:hover {
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .07
+        );
+}
+
+
+/* =========================================================
+   SETTINGS SECTIONS
+========================================================= */
+
+.settings-section {
+    padding:
+        19px 20px;
+
+    border-bottom:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .09
+        );
+}
+
+
+.settings-section-title {
+    margin-bottom: 13px;
+
+    color:
+        #f1f3f4;
+
+    font-size: 16px;
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   MAP / SATELLITE
+========================================================= */
+
+.segmented-control {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    padding: 2px;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        #4a5358;
+
+    border-radius: 8px;
+
+    background:
+        #11171a;
+}
+
+
+.segment-button {
+    min-height: 48px;
+
+    border: 0;
+
+    border-radius: 6px;
+
+    background:
+        transparent;
+
+    color:
+        #f0f0f0;
+
+    font-size: 16px;
+
+    cursor: pointer;
+}
+
+
+.segment-button.active {
+    color: white;
+
+    background:
+        linear-gradient(
+            180deg,
+            #2497ff,
+            #0876e5
+        );
+}
+
+
+/* =========================================================
+   SETTINGS ROWS
+========================================================= */
+
+.settings-row {
+    min-height: 78px;
+
+    padding:
+        13px 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    border-bottom:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .09
+        );
+}
+
+
+.settings-row-text {
+    min-width: 0;
+}
+
+
+.settings-row-title {
+    color:
+        #f4f4f4;
+
+    font-size: 16px;
+    font-weight: 500;
+}
+
+
+.settings-row-subtitle {
+    max-width: 245px;
+
+    margin-top: 5px;
+
+    color:
+        #9da5aa;
+
+    font-size: 13px;
+
+    line-height: 1.35;
+}
+
+
+/* =========================================================
+   SWITCH
+========================================================= */
+
+.switch {
+    position: relative;
+
+    width: 50px;
+    height: 29px;
+
+    flex-shrink: 0;
+}
+
+
+.switch input {
+    display: none;
+}
+
+
+.slider {
+    position: absolute;
+
+    inset: 0;
+
+    border-radius:
+        999px;
+
+    background:
+        #51595d;
+
+    cursor: pointer;
+
+    transition:
+        background .18s ease;
+}
+
+
+.slider::before {
+    content: "";
+
+    position: absolute;
+
+    width: 23px;
+    height: 23px;
+
+    top: 3px;
+    left: 3px;
+
+    border-radius: 50%;
+
+    background:
+        #f9f9f9;
+
+    box-shadow:
+        0 1px 5px
+        rgba(
+            0,
+            0,
+            0,
+            .35
+        );
+
+    transition:
+        transform .18s ease;
+}
+
+
+.switch input:checked
++
+.slider {
+    background:
+        #1685e5;
+}
+
+
+.switch input:checked
++
+.slider::before {
+    transform:
+        translateX(
+            21px
+        );
+}
+
+
+/* =========================================================
+   PALETTES
+========================================================= */
+
+.palette-options {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            1fr
+        );
+
+    gap: 10px;
+}
+
+
+.palette-card {
+    position: relative;
+
+    min-width: 0;
+
+    padding: 7px;
+
+    border:
+        1px solid
+        #414a4f;
+
+    border-radius: 9px;
+
+    background:
+        #101619;
+
+    color: white;
+
+    cursor: pointer;
+
+    text-align: center;
+}
+
+
+.palette-card.active {
+    border:
+        2px solid
+        #1685e5;
+
+    background:
+        #111d24;
+}
+
+
+.palette-check {
+    position: absolute;
+
+    top: 7px;
+    left: 7px;
+
+    z-index: 2;
+
+    width: 23px;
+    height: 23px;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        #1685e5;
+
+    color: white;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+.palette-card.active
+.palette-check {
+    display: flex;
+}
+
+
+.palette-preview {
+    width: 100%;
+    height: 53px;
+
+    margin-bottom: 8px;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .12
+        );
+
+    border-radius: 6px;
+}
+
+
+.palette-preview-blue {
+    background:
+        linear-gradient(
+            to right,
+            #ffffff,
+            #dff3ff,
+            #a5dcfa,
+            #55b8e6,
+            #138bd0,
+            #075fa8,
+            #02366e
+        );
+}
+
+
+.palette-preview-aqua {
+    background:
+        linear-gradient(
+            to right,
+            #fffdf4,
+            #e5f7d7,
+            #b9edca,
+            #72dcbf,
+            #2bc9b6,
+            #0ba598,
+            #05766f
+        );
+}
+
+
+.palette-preview-gray {
+    background:
+        linear-gradient(
+            to right,
+            #ffffff,
+            #ebebeb,
+            #c7c7c7,
+            #999999,
+            #6c6c6c,
+            #404040,
+            #181818
+        );
+}
+
+
+.palette-name {
+    min-height: 31px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color:
+        #e6e6e6;
+
+    font-size: 12px;
+
+    line-height: 1.2;
+}
+
+
+/* =========================================================
+   DISTANCE SETTINGS
+========================================================= */
+
+.distance-settings {
+    padding: 0;
+}
+
+
+.distance-toggle-row {
+    border-bottom: 0;
+}
+
+
+#radius-settings {
+    padding:
+        0 20px 19px 20px;
+}
+
+
+.radius-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 12px;
+
+    color:
+        #f0f0f0;
+
+    font-size: 14px;
+}
+
+
+.radius-header strong {
+    color: white;
+
+    font-size: 15px;
+}
+
+
+.radius-slider {
+    width: 100%;
+
+    accent-color:
+        #1685e5;
+}
+
+
+.radius-scale {
+    margin-top: 6px;
+
+    display: flex;
+    justify-content: space-between;
+
+    color:
+        #8f999e;
+
+    font-size: 11px;
+}
+
+
+.ring-values {
+    margin-top: 11px;
+
+    padding:
+        8px 10px;
+
+    border-radius: 7px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .04
+        );
+
+    color:
+        #e2e2e2;
+
+    font-size: 13px;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   SETTINGS INFO
+========================================================= */
+
+.settings-info {
+    margin: 16px;
+
+    padding: 13px;
+
+    display: flex;
+
+    gap: 10px;
+
+    border-radius: 9px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .04
+        );
+
+    color:
+        #9fa7ab;
+
+    font-size: 12px;
+
+    line-height: 1.4;
+}
+
+
+.settings-info-icon {
+    width: 20px;
+    height: 20px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border:
+        2px solid
+        #1685e5;
+
+    border-radius: 50%;
+
+    color:
+        #39a0ff;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   DEPTH LABEL
+========================================================= */
+
+.depth-label {
+    color:
+        #222;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    text-align: center;
+
+    white-space: nowrap;
+
+    pointer-events: none;
+
+    text-shadow:
+        -2px -2px 2px white,
+         2px -2px 2px white,
+        -2px  2px 2px white,
+         2px  2px 2px white,
+         0 0 5px white;
+}
+
+
+/* =========================================================
+   GPS POSITION
+========================================================= */
+
+.gps-location-icon {
+    position: relative;
+
+    width: 70px;
+    height: 90px;
+
+    pointer-events: none;
+}
+
+
+.gps-heading-cone {
+    position: absolute;
+
+    left: 50%;
+    top: 0;
+
+    width: 0;
+    height: 0;
+
+    border-left:
+        23px solid transparent;
+
+    border-right:
+        23px solid transparent;
+
+    border-bottom:
+        70px solid
+        rgba(
+            22,
+            133,
+            229,
+            .28
+        );
+
+    transform:
+        translateX(
+            -50%
+        )
+        rotate(
+            0deg
+        );
+
+    transform-origin:
+        50% 70px;
+}
+
+
+.gps-dot-shell {
+    position: absolute;
+
+    left: 50%;
+    bottom: 3px;
+
+    width: 38px;
+    height: 38px;
+
+    transform:
+        translateX(
+            -50%
+        );
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: white;
+
+    box-shadow:
+        0 2px 8px
+        rgba(
+            0,
+            0,
+            0,
+            .32
+        );
+}
+
+
+.gps-dot {
+    width: 27px;
+    height: 27px;
+
+    border:
+        2px solid white;
+
+    border-radius: 50%;
+
+    background:
+        #1685e5;
+}
+
+
+/* =========================================================
+   GPS RING LABEL
+========================================================= */
+
+.distance-ring-label {
+    color:
+        #333;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    pointer-events: none;
+
+    text-shadow:
+        -2px -2px 2px white,
+         2px -2px 2px white,
+        -2px  2px 2px white,
+         2px  2px 2px white;
+}
+
+
+/* =========================================================
+   GPS STATUS
+========================================================= */
+
+.gps-status {
+    position: fixed;
+
+    left: 18px;
+    bottom: 18px;
+
+    z-index: 1400;
+
+    min-width: 205px;
+
+    padding:
+        13px 15px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(
+                27,
+                34,
+                38,
+                .96
+            ),
+            rgba(
+                14,
+                20,
+                23,
+                .96
+            )
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .08
+        );
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 6px 20px
+        rgba(
+            0,
+            0,
+            0,
+            .35
+        );
+}
+
+
+.gps-status.hidden {
+    display: none;
+}
+
+
+.gps-status-dot {
+    width: 16px;
+    height: 16px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background:
+        #33c66a;
+}
+
+
+.gps-status strong {
+    display: block;
+
+    margin-bottom: 3px;
+
+    font-size: 15px;
+}
+
+
+#gps-accuracy {
+    color:
+        #d5dadd;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   MEASURE PANEL
+========================================================= */
+
+.measure-panel {
+    position: fixed;
+
+    left: 50%;
+    bottom: 18px;
+
+    z-index: 1450;
+
+    width: 470px;
+
+    transform:
+        translateX(
+            -50%
+        );
+
+    padding:
+        14px 16px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(
+                28,
+                35,
+                39,
+                .97
+            ),
+            rgba(
+                14,
+                20,
+                23,
+                .97
+            )
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .09
+        );
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 7px 24px
+        rgba(
+            0,
+            0,
+            0,
+            .38
+        );
+}
+
+
+.measure-panel.hidden {
+    display: none;
+}
+
+
+.measure-panel-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 14px;
+}
+
+
+.measure-panel-title {
+    color:
+        #f2f2f2;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+.measure-panel-distance {
+    margin-top: 3px;
+
+    color: white;
+
+    font-size: 30px;
+    font-weight: 500;
+}
+
+
+.measure-hint {
+    margin-top: 7px;
+
+    color:
+        #c4c9cc;
+
+    font-size: 12px;
+
+    line-height: 1.35;
+}
+
+
+.measure-close {
+    min-width: 105px;
+    height: 44px;
+
+    border:
+        1px solid
+        #4b555a;
+
+    border-radius: 8px;
+
+    background:
+        #171e22;
+
+    color: white;
+
+    font-size: 15px;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   MEASURE MAP ELEMENTS
+========================================================= */
+
+.measure-point-wrapper {
+    width: 29px;
+    height: 29px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border:
+        3px solid
+        #1685e5;
+
+    border-radius: 50%;
+
+    background: white;
+
+    color:
+        #1685e5;
+
+    box-shadow:
+        0 2px 7px
+        rgba(
+            0,
+            0,
+            0,
+            .28
+        );
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+.measure-live-label,
+.measure-final-label {
+    padding:
+        6px 9px;
+
+    border:
+        1px solid
+        rgba(
+            22,
+            133,
+            229,
+            .20
+        );
+
+    border-radius: 8px;
+
+    background:
+        rgba(
+            18,
+            24,
+            27,
+            .96
+        );
+
+    color:
+        #59afff;
+
+    box-shadow:
+        0 2px 8px
+        rgba(
+            0,
+            0,
+            0,
+            .30
+        );
+
+    font-size: 14px;
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (
+    max-width: 700px
+) {
+
+    #map-controls {
+        top:
+            calc(
+                10px
+                +
+                env(
+                    safe-area-inset-top
+                )
+            );
+
+        right:
+            calc(
+                8px
+                +
+                env(
+                    safe-area-inset-right
+                )
+            );
+
+        gap: 8px;
+    }
+
+
+    .zoom-stack {
+        top:
+            calc(
+                10px
+                +
+                env(
+                    safe-area-inset-top
+                )
+            );
+
+        left:
+            calc(
+                8px
+                +
+                env(
+                    safe-area-inset-left
+                )
+            );
+    }
+
+
+    .control-button,
+    .zoom-stack .control-button {
+        width: 48px;
+        height: 48px;
+    }
+
+
+    .ui-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+
+    #ruler-button.ruler-control {
+        width: 48px;
+        height: 48px;
+    }
+
+
+    .tape-measure-icon {
+        width: 34px;
+        height: 34px;
+    }
+
+
+    .settings-panel {
+        top:
+            calc(
+                10px
+                +
+                env(
+                    safe-area-inset-top
+                )
+            );
+
+        left:
+            calc(
+                8px
+                +
+                env(
+                    safe-area-inset-left
+                )
+            );
+
+        right:
+            calc(
+                64px
+                +
+                env(
+                    safe-area-inset-right
+                )
+            );
+
+        width: auto;
+
+        max-height:
+            calc(
+                100vh
+                -
+                20px
+                -
+                env(
+                    safe-area-inset-top
+                )
+                -
+                env(
+                    safe-area-inset-bottom
+                )
+            );
+
+        border-radius: 15px;
+    }
+
+
+    .settings-header {
+        min-height: 58px;
+
+        padding:
+            0 14px;
+    }
+
+
+    .settings-title {
+        font-size: 18px;
+    }
+
+
+    .settings-section {
+        padding: 14px;
+    }
+
+
+    .settings-row {
+        min-height: 68px;
+
+        padding:
+            9px 14px;
+    }
+
+
+    .settings-row-title {
+        font-size: 14px;
+    }
+
+
+    .settings-row-subtitle {
+        max-width: 185px;
+
+        font-size: 11px;
+    }
+
+
+    .palette-options {
+        gap: 6px;
+    }
+
+
+    .palette-card {
+        padding: 5px;
+    }
+
+
+    .palette-preview {
+        height: 41px;
+    }
+
+
+    .palette-name {
+        min-height: 28px;
+
+        font-size: 10px;
+    }
+
+
+    #radius-settings {
+        padding:
+            0 14px 15px 14px;
+    }
+
+
+    .settings-info {
+        margin: 13px;
+
+        padding: 11px;
+
+        font-size: 10px;
+    }
+
+
+    .gps-status {
+        left:
+            calc(
+                10px
+                +
+                env(
+                    safe-area-inset-left
+                )
+            );
+
+        bottom:
+            calc(
+                12px
+                +
+                env(
+                    safe-area-inset-bottom
+                )
+            );
+
+        min-width: 170px;
+
+        padding:
+            10px 11px;
+    }
+
+
+    .gps-status strong {
+        font-size: 13px;
+    }
+
+
+    #gps-accuracy {
+        font-size: 11px;
+    }
+
+
+    .measure-panel {
+        left:
+            calc(
+                10px
+                +
+                env(
+                    safe-area-inset-left
+                )
+            );
+
+        right:
+            calc(
+                10px
+                +
+                env(
+                    safe-area-inset-right
+                )
+            );
+
+        bottom:
+            calc(
+                12px
+                +
+                env(
+                    safe-area-inset-bottom
+                )
+            );
+
+        width: auto;
+
+        transform: none;
+
+        padding:
+            12px 13px;
+    }
+
+
+    .measure-panel-distance {
+        font-size: 25px;
+    }
+
+
+    .measure-close {
+        min-width: 80px;
+
+        height: 40px;
+
+        font-size: 13px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL PHONE
+========================================================= */
+
+@media (
+    max-width: 390px
+) {
+
+    .palette-options {
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+
+    .palette-card:last-child {
+        grid-column:
+            1 / 3;
+    }
+
+
+    .radius-scale {
+        font-size: 9px;
+    }
+
+}
